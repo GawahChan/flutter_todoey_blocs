@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todoey_blocs/domain/models/todo.dart';
+import 'package:flutter_todoey_blocs/presentation/bloc/todo_bloc.dart';
+import 'package:flutter_todoey_blocs/presentation/bloc/todo_event.dart';
 import 'package:flutter_todoey_blocs/presentation/todo_cubit.dart';
 
 class TodoView extends StatelessWidget {
   const TodoView({super.key});
 
   void _showAddTodoBox(BuildContext context) {
-    final todoCubit = context.read<TodoCubit>();
+    final todoBloc = context.read<TodoBloc>();
     final textController = TextEditingController();
 
     showDialog(
@@ -22,17 +24,17 @@ class TodoView extends StatelessWidget {
                     child: const Text("Cancel")),
                 TextButton(
                     onPressed: () {
-                      todoCubit.addTodo(textController.text);
+                      todoBloc.add(AddTodo(textController.text));
                       Navigator.of(context).pop();
                     },
-                    child: const Text("Add"))
+                    child: const Text("Add")),
               ],
             ));
   }
 
   @override
   Widget build(BuildContext context) {
-    final todoCubit = context.read<TodoCubit>();
+    final todoBloc = context.read<TodoBloc>();
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -51,12 +53,12 @@ class TodoView extends StatelessWidget {
                 leading: Checkbox(
                   value: todo.isCompleted,
                   onChanged: (value) {
-                    todoCubit.toggleCompletion(todo);
+                    todoBloc.add(ToggleCompletion(todo));
                   },
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.cancel),
-                  onPressed: () => todoCubit.deleteTodo(todo),
+                  onPressed: () => todoBloc.add(DeleteTodo(todo)),
                 ),
               );
             },
