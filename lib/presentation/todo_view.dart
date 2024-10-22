@@ -41,7 +41,7 @@ class TodoView extends StatelessWidget {
         onPressed: () => _showAddTodoBox(context),
         child: const Icon(Icons.add),
       ),
-      body: BlocBuilder<TodoCubit, List<Todo>>(
+      body: BlocBuilder<TodoBloc, List<Todo>>(
         builder: (context, state) {
           return ListView.builder(
             itemCount: state.length,

@@ -7,8 +7,6 @@ class TodoBloc extends Bloc<TodoBlocEvent, List<Todo>> {
   final TodoRepo todoRepo;
 
   TodoBloc(this.todoRepo) : super([]) {
-    LoadTodos();
-
     on<LoadTodos>((event, emit) async {
       final todoList = await todoRepo.getTodos();
       emit(todoList);
@@ -21,21 +19,19 @@ class TodoBloc extends Bloc<TodoBlocEvent, List<Todo>> {
       );
 
       await todoRepo.addTodo(newTodo);
-      LoadTodos();
+      add(LoadTodos());
     });
 
     on<DeleteTodo>((event, emit) async {
       await todoRepo.deleteTodo(event.deleteTodo);
-      LoadTodos();
+      add(LoadTodos());
     });
 
-    on<ToggleCompletion>(
-      (event, emit) async {
-        final updatedTodo = event.updateTodo.toggleCompletion();
+    on<ToggleCompletion>((event, emit) async {
+      final updatedTodo = event.updateTodo.toggleCompletion();
 
-        await todoRepo.updateTodo(updatedTodo);
-        LoadTodos();
-      },
-    );
+      await todoRepo.updateTodo(updatedTodo);
+      add(LoadTodos());
+    });
   }
 }

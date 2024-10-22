@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todoey_blocs/data/models/isar_todo.dart';
 import 'package:flutter_todoey_blocs/data/repository/isar_todo_repo.dart';
 import 'package:flutter_todoey_blocs/domain/repository/todo_repo.dart';
+import 'package:flutter_todoey_blocs/presentation/bloc/todo_bloc_observer.dart';
 import 'package:flutter_todoey_blocs/presentation/todo_page.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
+  Bloc.observer = TodoBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
 
   // get directory path for storing data
